@@ -1,0 +1,18 @@
+#game-window {
+    width: 400px; height: 400px;
+    background: #7cfc00; position: relative; overflow: hidden;
+}
+#player {
+    width: 32px; height: 32px;
+    background: red; position: absolute;
+    transition: all 0.2s; /* 1歩動くアニメーション */
+}
+.grass {
+    width: 64px; height: 64px;
+    background: green; position: absolute; opacity: 0.5;
+}
+#battle-screen {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    background: black; color: white; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; z-index: 100;
+}
