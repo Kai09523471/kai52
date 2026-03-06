@@ -1,1 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Mario World</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="mario"></div>
+        <div class="ground"></div>
+        <div class="block" style="left: 200px; top: 250px;"></div>
+        <div class="block" style="left: 250px; top: 250px;"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+#game-container {
+    position: relative;
+    width: 800px;
+    height: 400px;
+    border: 2px solid black;
+    background-color: #87CEEB; /* 空の色 */
+    overflow: hidden; /* はみ出した要素を隠す */
+}
 
+#mario {
+    position: absolute;
+    width: 32px; /* マリオのサイズ */
+    height: 32px;
+    background-image: url('mario.png'); /* マリオの画像 */
+    background-size: cover;
+    bottom: 32px; /* 地面から少し上に配置 */
+    left: 50px;
+}
+
+.ground {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 32px;
+    background-color: #8B4513; /* 地面の色 */
+}
+
+.block {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background-color: #DAA520; /* ブロックの色 */
+    border: 1px solid #B8860B;
+const mario = document.getElementById('mario');
+let marioX = 50; // マリオの初期X座標
+const marioSpeed = 5;
+
+// キーボードイベントのリスナー
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') {
+        marioX += marioSpeed;
+    } else if (e.key === 'ArrowLeft') {
+        marioX -= marioSpeed;
+    }
+    mario.style.left = marioX + 'px';
+});
+
+// ここにジャンプや当たり判定のロジックを追加していく
+let y = 0;          // 垂直位置
+let vy = 0;         // 垂直速度（Vertical Velocity）
+const gravity = 0.8; // 重力の強さ
+const jumpPower = -15; // ジャンプの初速（マイナスが上方向）
+let isJumping = false;
+
+function update() {
+    vy += gravity; // 常に重力で下に加速
+    y += vy;       // 速度を位置に加算
+
+    // 地面（y=300）に着地した判定
+    if (y > 300) {
+        y = 300;
+        vy = 0;
+        isJumping = false;
+    }
+    mario.style.top = y + 'px';
+    requestAnimationFrame(update); // ループ処理
+}
+function checkCollision(a, b) {
+    const aRect = a.getBoundingClientRect();
+    const bRect = b.getBoundingClientRect();
+
+    return !(
+        aRect.top > bRect.bottom ||
+        aRect.bottom < bRect.top ||
+        aRect.left > bRect.right ||
+        aRect.right < bRect.left
+    );
+}
+// もしcheckCollision(mario, coin)がtrueなら、コインを消してスコアを＋1する
+}
+let marioState = "normal"; // normal, big, fire
+
+function getMushroom() {
+    marioState = "big";
+    mario.style.width = "64px";  // サイズを大きくする
+    mario.style.height = "64px";
+    playSfx("grow.mp3");        // 効果音を鳴らす
+}
